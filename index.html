@@ -46,6 +46,7 @@
   .btn:hover{opacity:.82}
   .btn.ghost{background:#fff;color:var(--ink)}
   .btn.naver{background:#03C75A;border-color:#03C75A;color:#fff}
+  .btn.ohou{background:#35C5F0;border-color:#35C5F0;color:#fff}
   .btn[aria-disabled="true"]{background:#bdbdbb;border-color:#bdbdbb;pointer-events:none}
 
   /* sections */
@@ -183,7 +184,8 @@
       <a href="#shop" class="hide-m">SHOP</a>
       <a href="#about" class="hide-m">ABOUT</a>
       <a href="https://www.instagram.com/less_but_better_studio/" target="_blank" rel="noopener" class="hide-m">INSTAGRAM ↗</a>
-      <a class="store-link" href="#" target="_blank" rel="noopener">STORE ↗</a>
+      <a class="store-link" href="#" target="_blank" rel="noopener">NAVER ↗</a>
+      <a class="ohou-link" href="https://store.ohou.se/brands/98239?affect_id=4223704&amp;affect_type=ProductSaleDetail&amp;query=LBBS" target="_blank" rel="noopener">오늘의집 ↗</a>
     </div>
   </div>
   <nav class="drawer" id="drawer">
@@ -194,6 +196,7 @@
       <a href="#lookbook">LOOKBOOK</a>
       <a href="#about">ABOUT</a>
       <a class="store-link" href="#" target="_blank" rel="noopener">NAVER SMART STORE ↗</a>
+      <a class="ohou-link" href="https://store.ohou.se/brands/98239?affect_id=4223704&amp;affect_type=ProductSaleDetail&amp;query=LBBS" target="_blank" rel="noopener">오늘의집 STORE ↗</a>
       <a href="https://www.instagram.com/less_but_better_studio/" target="_blank" rel="noopener">INSTAGRAM ↗</a>
     </div>
   </nav>
@@ -287,9 +290,10 @@
           <div id="pdOptions"></div>
           <div class="buy">
             <a class="btn naver" id="pdBuy" href="#" target="_blank" rel="noopener">네이버 스마트스토어에서 구매하기 ↗</a>
+            <a class="btn ohou ohou-buy" href="https://store.ohou.se/brands/98239?affect_id=4223704&amp;affect_type=ProductSaleDetail&amp;query=LBBS" target="_blank" rel="noopener">오늘의집에서 구매하기 ↗</a>
             <a class="btn ghost" href="#shop">다른 제품 보기</a>
           </div>
-          <div class="note">구매와 결제는 네이버 스마트스토어에서 진행됩니다. 버튼을 누르면 새 창으로 이동해요.</div>
+          <div class="note">구매와 결제는 네이버 스마트스토어 또는 오늘의집에서 진행됩니다. 버튼을 누르면 새 창으로 이동해요.</div>
           <div id="pdDetails"></div>
         </div>
       </div>
@@ -300,6 +304,7 @@
       <div class="pd-story-imgs" id="pdStory"></div>
       <div class="pd-story-buy">
         <a class="btn naver" id="pdBuy2" href="#" target="_blank" rel="noopener">네이버 스마트스토어에서 구매하기 ↗</a>
+        <a class="btn ohou ohou-buy" href="https://store.ohou.se/brands/98239?affect_id=4223704&amp;affect_type=ProductSaleDetail&amp;query=LBBS" target="_blank" rel="noopener">오늘의집에서 구매하기 ↗</a>
         <a class="btn ghost" href="#" id="toTop">맨 위로</a>
       </div>
     </section>
@@ -326,6 +331,7 @@
     </div>
     <div class="row" style="margin-top:10px">
       <a class="store-link" href="#" target="_blank" rel="noopener">Naver Smart Store ↗</a>
+      <a class="ohou-link" href="https://store.ohou.se/brands/98239?affect_id=4223704&amp;affect_type=ProductSaleDetail&amp;query=LBBS" target="_blank" rel="noopener">오늘의집 Store ↗</a>
       <a href="https://www.instagram.com/less_but_better_studio/" target="_blank" rel="noopener">Instagram @less_but_better_studio ↗</a>
       <span>© LBBS. All rights reserved.</span>
     </div>
@@ -509,6 +515,7 @@
       if (out){ a.setAttribute('aria-disabled','true'); a.textContent = '일시 품절 — 재입고 준비 중'; }
       else { a.removeAttribute('aria-disabled'); a.textContent = '네이버 스마트스토어에서 구매하기 ↗'; }
     });
+    document.querySelectorAll('.ohou-buy').forEach(a => { a.style.display = out ? 'none' : ''; });
   }
 
   $('toTop').addEventListener('click', e => { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); });
