@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LBBS — Less But Better Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#161616; --sub:#6f6f6c; --line:#e4e4e0; --bg:#ffffff; --tile:#f1f1ef; --steel:#d9dadb; --dark:#171717;
+    --wrap:1240px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  button{font-family:inherit;color:inherit}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px}
+  .en{font-family:"Instrument Sans",sans-serif}
+  .logo-svg{display:block;height:22px;width:62px;color:var(--ink)}
+
+  /* header */
+  header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .bar{height:64px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+  .menu-btn{background:none;border:0;padding:10px;margin-left:-10px;cursor:pointer;width:44px;height:44px}
+  .menu-btn span{display:block;width:20px;height:1.5px;background:var(--ink);margin:5px 0}
+  .right{display:flex;justify-content:flex-end;gap:22px;font-size:12.5px;letter-spacing:.08em}
+  .right a{font-family:"Instrument Sans",sans-serif;font-weight:500}
+  nav.drawer{display:none;border-top:1px solid var(--line)}
+  nav.drawer.open{display:block}
+  nav.drawer .wrap{display:flex;flex-wrap:wrap;gap:6px 28px;padding-top:14px;padding-bottom:16px}
+  nav.drawer a{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.08em;padding:6px 0}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1fr 1fr;min-height:660px;border-bottom:1px solid var(--line)}
+  .hero-text{display:flex;flex-direction:column;justify-content:center;padding:64px 56px}
+  .eyebrow{font-family:"Instrument Sans",sans-serif;font-size:11.5px;letter-spacing:.2em;color:var(--sub);margin-bottom:22px;font-weight:500}
+  .hero h1{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:clamp(44px,6vw,86px);line-height:.98;letter-spacing:-.03em;margin:0 0 28px}
+  .hero h1 em{font-style:normal;color:#9a9b9c}
+  .hero p{color:var(--sub);max-width:430px;margin:0 0 32px;font-weight:300}
+  .hero-img{background:var(--tile);overflow:hidden}
+  .hero-img img{width:100%;height:100%;object-fit:cover}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 28px;border:1px solid var(--ink);font-size:14px;font-weight:500;letter-spacing:.02em;cursor:pointer;background:var(--ink);color:#fff;transition:opacity .2s}
+  .btn:hover{opacity:.82}
+  .btn.ghost{background:#fff;color:var(--ink)}
+  .btn.naver{background:#03C75A;border-color:#03C75A;color:#fff}
+  .btn[aria-disabled="true"]{background:#bdbdbb;border-color:#bdbdbb;pointer-events:none}
+
+  /* sections */
+  section{padding:88px 0}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px;gap:20px}
+  .sec-head h2{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:clamp(32px,3.8vw,50px);line-height:1;margin:0;letter-spacing:-.03em}
+  .sec-head span{color:var(--sub);font-size:13px}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 20px}
+  .card{display:block;cursor:pointer}
+  .card .ph{background:var(--tile);aspect-ratio:1/1;overflow:hidden;position:relative}
+  .card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .card:hover .ph img{transform:scale(1.03)}
+  .card .meta-top{display:flex;justify-content:space-between;align-items:center;margin:14px 0 4px;font-family:"Instrument Sans",sans-serif;font-size:11px;letter-spacing:.12em;color:var(--sub)}
+  .card h3{margin:0;font-family:"Instrument Sans","Noto Sans KR",sans-serif;font-weight:600;font-size:15.5px;letter-spacing:-.005em}
+  .card .ko{font-size:13px;color:var(--sub)}
+  .badges{display:flex;gap:5px;margin-top:8px}
+  .badge{font-family:"Instrument Sans",sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.06em;padding:2px 7px;border:1px solid var(--ink)}
+  .badge.fill{background:var(--ink);color:#fff}
+  .badge.mute{border-color:#b9b9b6;color:#8b8b88}
+  .card.soldout .ph img{filter:grayscale(.3) opacity(.72)}
+  .soon .ph{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:var(--sub);font-size:13px;text-align:center;padding:24px}
+  .soon .ph b{font-family:"Instrument Sans",sans-serif;color:var(--ink);font-size:22px;font-weight:600;letter-spacing:-.01em}
+
+  /* process strip */
+  .process{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:0}
+  .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .step{padding:34px 24px;border-left:1px solid var(--line)}
+  .step:first-child{border-left:0;padding-left:0}
+  .step .n{font-family:"Instrument Sans",sans-serif;font-size:11.5px;letter-spacing:.16em;color:var(--sub)}
+  .step b{display:block;font-family:"Instrument Sans",sans-serif;font-size:19px;font-weight:600;margin:6px 0 4px;letter-spacing:-.01em}
+  .step p{margin:0;color:var(--sub);font-size:13.5px}
+
+  /* lookbook */
+  .look{display:grid;grid-template-columns:1.25fr 1fr 1fr;grid-template-rows:auto auto;gap:16px}
+  .look figure{margin:0;background:var(--tile);overflow:hidden}
+  .look img{width:100%;height:100%;object-fit:cover}
+  .look .tall{grid-row:span 2}
+
+  /* story */
+  .story{background:var(--dark);color:#fff}
+  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .story h2{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:clamp(36px,4.4vw,62px);line-height:1;letter-spacing:-.03em;margin:0 0 26px}
+  .story .quote{font-size:19px;font-weight:500;margin:0 0 18px}
+  .story p{color:#bdbdbd;font-weight:300;margin:0 0 12px}
+  .story img{width:100%;aspect-ratio:4/3;object-fit:cover}
+  .values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .value{border-top:1px solid var(--ink);padding-top:16px}
+  .value b{font-family:"Instrument Sans",sans-serif;display:block;font-size:12.5px;letter-spacing:.1em;margin-bottom:8px;font-weight:600}
+  .value p{margin:0;color:var(--sub);font-size:14px}
+
+  /* product detail */
+  .pd{display:none;padding:56px 0 40px}
+  .pd.show{display:block}
+  .crumb{font-size:12px;color:var(--sub);margin-bottom:26px}
+  .crumb a:hover{color:var(--ink)}
+  .pd-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:start}
+  .gallery-main{background:var(--tile);aspect-ratio:1/1;overflow:hidden}
+  .gallery-main img{width:100%;height:100%;object-fit:cover}
+  .thumbs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:8px}
+  .thumbs button{padding:0;border:1px solid transparent;background:var(--tile);aspect-ratio:1/1;cursor:pointer;overflow:hidden}
+  .thumbs button.on{border-color:var(--ink)}
+  .thumbs img{width:100%;height:100%;object-fit:cover}
+  .info .cat{font-family:"Instrument Sans",sans-serif;font-size:11.5px;letter-spacing:.16em;color:var(--sub);margin-bottom:8px}
+  .info h1{font-family:"Instrument Sans","Noto Sans KR",sans-serif;font-size:27px;font-weight:600;margin:0 0 4px;line-height:1.25;letter-spacing:-.01em}
+  .info .ko{color:var(--sub);font-size:14px;margin-bottom:20px}
+  .lead{font-weight:300;margin:0 0 6px}
+  .meta{font-size:13px;color:var(--sub);margin:18px 0 26px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0}
+  .meta div{display:flex;gap:16px}
+  .meta div b{width:76px;flex:none;color:var(--ink);font-weight:500}
+  .opt-label{font-size:13px;font-weight:500;margin-bottom:10px}
+  .opt-label span{color:var(--sub);font-weight:400}
+  .swatches{display:flex;gap:8px;margin-bottom:26px;flex-wrap:wrap}
+  .sw{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:8px 14px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:13px;min-height:48px;min-width:64px;line-height:1.3}
+  .sw small{color:var(--sub);font-size:11px}
+  .sw.on{border-color:var(--ink)}
+  .sw.out{color:#a5a5a2}
+  .sw.out small::after{content:" · 품절"}
+  .buy{display:grid;grid-template-columns:1fr;gap:8px}
+  .buy .btn{width:100%}
+  .note{font-size:12px;color:var(--sub);margin-top:10px}
+  details{border-bottom:1px solid var(--line)}
+  details:first-of-type{border-top:1px solid var(--line);margin-top:30px}
+  summary{list-style:none;cursor:pointer;padding:16px 0;font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1em;display:flex;justify-content:space-between}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-weight:500}
+  details[open] summary::after{content:"–"}
+  details .body{padding:0 0 18px;font-size:13.5px;color:#333}
+  details .body p{margin:0 0 6px}
+  .pd-story{margin-top:88px;border-top:1px solid var(--line);padding-top:64px}
+  .pd-story-head{text-align:center;margin-bottom:40px}
+  .pd-story-head h2{font-size:22px;font-weight:600;margin:0}
+  .pd-story-imgs{max-width:860px;margin:0 auto}
+  .pd-story-imgs img{display:block;width:100%;height:auto}
+  .pd-tabs{display:flex;justify-content:center;gap:8px;margin:-16px 0 32px;flex-wrap:wrap}
+  .pd-tabs button{border:1px solid var(--line);background:#fff;padding:8px 18px;font-size:13px;cursor:pointer;font-family:"Instrument Sans",sans-serif;letter-spacing:.06em}
+  .pd-tabs button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+  .pd-story-buy{max-width:880px;margin:44px auto 0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .related{padding-top:72px}
+
+  footer{background:var(--dark);color:#bdbdbd;font-size:12.5px;padding:44px 0 56px}
+  footer .logo-svg{color:#fff;height:20px;width:57px;margin-bottom:16px}
+  footer .row{display:flex;flex-wrap:wrap;gap:6px 22px}
+  footer a{color:#fff}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;min-height:auto}
+    .hero-img{order:-1;aspect-ratio:4/5}
+    .hero-text{padding:40px 24px 48px}
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px}
+    .pd-grid,.story-grid{grid-template-columns:1fr;gap:28px}
+    .look{grid-template-columns:1fr 1fr}
+    .look .tall{grid-column:span 2;grid-row:auto;aspect-ratio:1/1}
+    .values{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr 1fr}
+    .step{padding:24px 16px}
+    .step:nth-child(3){border-left:0;padding-left:0}
+    .step:nth-child(n+3){border-top:1px solid var(--line)}
+    .right .hide-m{display:none}
+    section{padding:64px 0}
+    .wrap{padding:0 18px}
+    .thumbs{grid-template-columns:repeat(5,minmax(0,1fr))}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="lbbs-logo" viewBox="192 241 438 155"><g fill="currentColor"><path d="M275.93,378.09h-38.6c-5.33,0-9.6-.37-12.8-1.1-3.2-.73-5.67-1.93-7.4-3.6-1.73-1.67-2.9-3.83-3.5-6.5-.6-2.67-.9-5.87-.9-9.6v-108.8c0-1.07-.4-2-1.2-2.8s-1.73-1.2-2.8-1.2h-10.2c-1.07,0-2,.4-2.8,1.2s-1.2,1.73-1.2,2.8v108.8c0,8.27,1.2,14.83,3.6,19.7,2.4,4.87,5.6,8.6,9.6,11.2,4,2.6,8.57,4.3,13.7,5.1,5.13.8,10.37,1.2,15.7,1.2,9.47,0,17.67-.2,24.6-.6,6.93-.4,11.73-.8,14.4-1.2.67-.13,1.17-.46,1.5-1,.33-.53.5-1.13.5-1.8v-9.4c0-1.6-.73-2.4-2.2-2.4Z"/> <path d="M626.53,343.29c-1.06-3.47-2.86-6.8-5.38-10-2.52-3.2-5.75-6.4-9.67-9.6-3.92-3.2-8.81-6.53-14.66-10l-18.35-11c-3.73-2.27-6.98-4.37-9.78-6.3-2.79-1.93-5.05-3.83-6.78-5.7-1.73-1.87-3.02-3.77-3.89-5.7-.87-1.93-1.3-4.1-1.3-6.5,0-7.33,2.3-12.33,6.9-15,4.6-2.67,12.1-4,22.5-4,5.87,0,11.97.13,18.3.4,6.33.27,11.7.53,16.1.8h.4c2.27,0,3.4-1.07,3.4-3.2v-8.6c0-1.87-1.13-3-3.4-3.4-1.87-.27-4.2-.57-7-.9-2.8-.33-5.77-.6-8.9-.8-3.13-.2-6.33-.37-9.6-.5-3.27-.13-6.37-.2-9.3-.2-15.33,0-27.17,2.87-35.5,8.6-8.33,5.73-12.5,14.67-12.5,26.8,0,8,2.3,14.83,6.9,20.5,4.6,5.67,11.5,11.3,20.7,16.9l19.4,11.8c4.53,2.8,8.33,5.3,11.4,7.5,3.07,2.2,5.53,4.3,7.4,6.3,1.87,2,3.2,4.03,4,6.1.8,2.07,1.2,4.37,1.2,6.9,0,3.47-.47,6.67-1.4,9.6-.93,2.93-2.53,5.43-4.8,7.5-2.27,2.07-5.37,3.67-9.3,4.8-3.93,1.13-8.9,1.7-14.9,1.7-2.27,0-4.83-.03-7.7-.1-2.87-.07-5.8-.13-8.8-.2-3-.07-5.93-.2-8.8-.4-2.87-.2-5.43-.37-7.7-.5h-.6c-.93,0-1.73.27-2.4.8-.67.54-1,1.33-1,2.4v8c0,1.07.2,1.87.6,2.4.4.53,1.47.93,3.2,1.2,4.4.67,9.27,1.3,14.6,1.9,5.33.6,11.53.9,18.6.9,9.87,0,18-1.2,24.4-3.6,6.4-2.4,11.43-5.5,15.1-9.3,3.67-3.8,6.23-8.07,7.7-12.8,1.47-4.73,2.2-9.5,2.2-14.3,0-4-.53-7.73-1.6-11.2Z"/> <path d="M372.73,316.18c6.8-2.66,12.07-6.69,15.8-12.08,3.73-5.39,5.6-11.82,5.6-19.27v-3.19c0-7.59-1.57-13.85-4.7-18.77-3.13-4.93-7.37-8.85-12.7-11.78-5.33-2.93-11.53-4.99-18.6-6.19-7.07-1.2-14.6-1.8-22.6-1.8-6.53,0-12.63.17-18.3.5-5.67.33-10.17.7-13.5,1.1-4.27.4-6.4,2.87-6.4,7.4v133.2c0,2.53.53,4.33,1.6,5.4,1.07,1.07,2.73,1.73,5,2,3.87.67,8.6,1.13,14.2,1.4,5.6.27,11.73.4,18.4.4,7.87,0,15.3-.63,22.3-1.9s13.2-3.5,18.6-6.71c5.4-3.2,9.67-7.54,12.8-13.02,3.13-5.47,4.7-12.42,4.7-20.83v-3.4c0-7.74-1.97-14.48-5.9-20.23-3.93-5.74-9.37-9.81-16.3-12.22ZM376.73,351.99c0,5.35-.93,9.8-2.79,13.35-1.86,3.55-4.52,6.33-7.98,8.33-3.46,2.01-7.64,3.41-12.56,4.22-4.92.8-10.5,1.2-16.74,1.2-3.46,0-6.94-.1-10.47-.3-3.52-.2-6.94-.37-10.27-.5v-119.2c2.79-.13,5.91-.27,9.37-.4,3.45-.13,6.91-.2,10.37-.2,6.11,0,11.62.3,16.54.9,4.92.6,9.13,1.77,12.66,3.5,3.52,1.73,6.25,4.1,8.18,7.1,1.92,3,2.89,6.9,2.89,11.7v3.2c0,3.2-.43,6.23-1.3,9.1-.86,2.87-2.43,5.4-4.68,7.6s-5.25,3.93-8.97,5.2c-3.72,1.27-8.51,1.9-14.35,1.9h-6.71v14.4h6.71c5.84,0,10.73.7,14.65,2.11,3.92,1.41,7.01,3.28,9.27,5.62,2.26,2.34,3.85,5.05,4.78,8.13.93,3.08,1.4,6.29,1.4,9.63v3.41Z"/> <path d="M495.93,316.18c6.8-2.66,12.06-6.69,15.8-12.08,3.73-5.39,5.6-11.82,5.6-19.27v-3.19c0-7.59-1.57-13.85-4.7-18.77-3.13-4.93-7.37-8.85-12.7-11.78-5.33-2.93-11.54-4.99-18.6-6.19-7.07-1.2-14.6-1.8-22.6-1.8-6.53,0-12.63.17-18.3.5-5.67.33-10.17.7-13.5,1.1-4.27.4-6.4,2.87-6.4,7.4v133.2c0,2.53.53,4.33,1.6,5.4,1.07,1.07,2.73,1.73,5,2,3.87.67,8.6,1.13,14.2,1.4,5.6.27,11.73.4,18.4.4,7.87,0,15.3-.63,22.3-1.9s13.2-3.5,18.6-6.71c5.4-3.2,9.67-7.54,12.8-13.02,3.13-5.47,4.7-12.42,4.7-20.83v-3.4c0-7.74-1.97-14.48-5.9-20.23-3.93-5.74-9.37-9.81-16.3-12.22ZM499.93,351.99c0,5.35-.93,9.8-2.79,13.35-1.86,3.55-4.52,6.33-7.97,8.33-3.46,2.01-7.64,3.41-12.56,4.22-4.92.8-10.5,1.2-16.74,1.2-3.46,0-6.95-.1-10.47-.3s-6.94-.37-10.27-.5v-119.2c2.79-.13,5.91-.27,9.37-.4,3.45-.13,6.91-.2,10.37-.2,6.11,0,11.62.3,16.54.9,4.91.6,9.13,1.77,12.66,3.5,3.52,1.73,6.25,4.1,8.17,7.1,1.93,3,2.89,6.9,2.89,11.7v3.2c0,3.2-.43,6.23-1.3,9.1-.86,2.87-2.42,5.4-4.68,7.6s-5.25,3.93-8.97,5.2c-3.72,1.27-8.51,1.9-14.35,1.9h-6.71v14.4h6.71c5.84,0,10.73.7,14.65,2.11,3.92,1.41,7.01,3.28,9.27,5.62,2.26,2.34,3.85,5.05,4.79,8.13.93,3.08,1.4,6.29,1.4,9.63v3.41Z"/> </g></symbol>
+</svg>
+
+<header>
+  <div class="wrap bar">
+    <div><button class="menu-btn" id="menuBtn" aria-label="메뉴 열기" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    <a href="#home" aria-label="LBBS 홈"><svg class="logo-svg" viewBox="0 0 438 155"><use href="#lbbs-logo"/></svg></a>
+    <div class="right">
+      <a href="#shop" class="hide-m">SHOP</a>
+      <a href="#about" class="hide-m">ABOUT</a>
+      <a href="https://www.instagram.com/less_but_better_studio/" target="_blank" rel="noopener" class="hide-m">INSTAGRAM ↗</a>
+      <a class="store-link" href="#" target="_blank" rel="noopener">STORE ↗</a>
+    </div>
+  </div>
+  <nav class="drawer" id="drawer">
+    <div class="wrap">
+      <a href="#tissue">TISSUE CASE</a>
+      <a href="#tray">TRAY</a>
+      <a href="#frame">STAND FRAME</a>
+      <a href="#lookbook">LOOKBOOK</a>
+      <a href="#about">ABOUT</a>
+      <a class="store-link" href="#" target="_blank" rel="noopener">NAVER SMART STORE ↗</a>
+      <a href="https://www.instagram.com/less_but_better_studio/" target="_blank" rel="noopener">INSTAGRAM ↗</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- HOME -->
+  <div id="homeView">
+    <div class="hero">
+      <div class="hero-text">
+        <div class="eyebrow">LESS BUT BETTER STUDIO</div>
+        <h1>Less,<br>but<br><em>better.</em></h1>
+        <p>"좋은 디자인은 무엇인가"라는 질문에서 출발한 디자인 리빙 브랜드. 건축 디자이너가 설계하고 국내에서 스테인리스 스틸로 정직하게 만듭니다.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn" href="#shop">제품 보기</a>
+          <a class="btn ghost" href="#about">브랜드 이야기</a>
+        </div>
+      </div>
+      <div class="hero-img"><img src="img/hero.jpg" alt="흰 선반 위에 놓인 LBBS 스테인리스 티슈케이스"></div>
+    </div>
+
+    <section id="shop">
+      <div class="wrap">
+        <div class="sec-head"><h2>Collection</h2><span>Stainless Steel · Made in Korea</span></div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <section class="process" aria-label="디자인 과정">
+      <div class="wrap steps">
+        <div class="step"><span class="n">01</span><b>Model</b><p>라이노로 형태와 비례를 직접 모델링합니다.</p></div>
+        <div class="step"><span class="n">02</span><b>Draw</b><p>건축 도면처럼 치수 하나까지 캐드로 그립니다.</p></div>
+        <div class="step"><span class="n">03</span><b>Make</b><p>국내 판금 공장에서 레이저 커팅과 절곡으로 제작합니다.</p></div>
+        <div class="step"><span class="n">04</span><b>Deliver</b><p>하나씩 검수해 스마트스토어로 보내드립니다.</p></div>
+      </div>
+    </section>
+
+    <section id="lookbook">
+      <div class="wrap">
+        <div class="sec-head"><h2>Lookbook</h2><span>공간 속 LBBS</span></div>
+        <div class="look">
+          <figure class="tall"><img style="object-position:45% 72%" src="img/tray-life.jpg" alt="흰 선반 위에 시계, 안경, 반지를 올려둔 LBBS 트레이 세 개" loading="lazy"></figure>
+          <figure><img src="img/frame5r-2.jpg" alt="책상 위 사진을 담은 LBBS 5R 스탠드 프레임" loading="lazy" style="aspect-ratio:1/1"></figure>
+          <figure><img src="img/frameCard-1.jpg" alt="수납장 위 명함을 꽂은 LBBS 카드 프레임" loading="lazy" style="aspect-ratio:1/1"></figure>
+          <figure><img src="img/tissue-2.jpg" alt="건축 잡지 옆에 놓인 LBBS 티슈케이스" loading="lazy" style="aspect-ratio:1/1"></figure>
+          <figure><img src="img/tray-desk.jpg" alt="책상 위에 다섯 가지 사이즈의 LBBS 트레이를 배치한 모습" loading="lazy" style="aspect-ratio:1/1"></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="story" id="about">
+      <div class="wrap story-grid">
+        <div>
+          <div class="eyebrow" style="color:#8d8d8d">ABOUT LBBS</div>
+          <h2>Simple.<br>Clear.<br>Honest.</h2>
+          <p class="quote">"단순함에서 시작되는 깊은 가치"</p>
+          <p>디자인 리빙 브랜드 LBBS(엘비비에스)는 "좋은 디자인은 무엇인가"라는 질문에서 출발했습니다. 'Less But Better — 더 적게, 그러나 더 좋게'라는 슬로건 아래, 디자인은 단순하고 명료하며 정직해야 한다는 철학을 지킵니다.</p>
+          <p>건축을 설계하는 디자이너가 공간의 비례와 구조를 다루듯 작은 물건 하나를 다듬습니다. 앞으로도 기존에 없던 감각적이고 차별화된 제품을 꾸준히 선보이겠습니다.</p>
+        </div>
+        <img src="img/cover.jpg" alt="LBBS 로고가 새겨진 스테인리스 헤어라인 표면 클로즈업" loading="lazy">
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="values">
+          <div class="value"><b>DESIGNED BY ARCHITECT</b><p>건축 디자이너가 라이노와 캐드로 직접 설계해, 선 하나와 모서리 하나에도 이유가 있습니다.</p></div>
+          <div class="value"><b>STAINLESS STEEL</b><p>헤어라인(HL) 마감의 스테인리스 판재를 접어 만든 구조. 녹에 강하고 오래 써도 질감이 변하지 않습니다.</p></div>
+          <div class="value"><b>MADE IN KOREA</b><p>국내 공장에서 제작하고, 모든 제품에 LBBS 각인을 새겨 하나씩 검수해 보내드립니다.</p></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PRODUCT DETAIL (rendered from data) -->
+  <div class="pd" id="pdView">
+    <div class="wrap">
+      <div class="crumb"><a href="#home">Home</a> &nbsp;/&nbsp; <a href="#shop">Collection</a> &nbsp;/&nbsp; <span id="pdCrumb"></span></div>
+      <div class="pd-grid">
+        <div>
+          <div class="gallery-main"><img id="mainImg" src="" alt=""></div>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+        <div class="info">
+          <div class="cat" id="pdCat"></div>
+          <h1 id="pdName"></h1>
+          <div class="ko" id="pdKo"></div>
+          <div id="pdLead"></div>
+          <div class="meta" id="pdMeta"></div>
+          <div id="pdOptions"></div>
+          <div class="buy">
+            <a class="btn naver" id="pdBuy" href="#" target="_blank" rel="noopener">네이버 스마트스토어에서 구매하기 ↗</a>
+            <a class="btn ghost" href="#shop">다른 제품 보기</a>
+          </div>
+          <div class="note">구매와 결제는 네이버 스마트스토어에서 진행됩니다. 버튼을 누르면 새 창으로 이동해요.</div>
+          <div id="pdDetails"></div>
+        </div>
+      </div>
+    </div>
+    <section class="pd-story">
+      <div class="pd-story-head"><span class="eyebrow" style="display:block;margin-bottom:10px">PRODUCT DETAIL</span><h2 id="pdStoryTitle">상세 정보</h2></div>
+      <div class="pd-tabs" id="pdTabs"></div>
+      <div class="pd-story-imgs" id="pdStory"></div>
+      <div class="pd-story-buy">
+        <a class="btn naver" id="pdBuy2" href="#" target="_blank" rel="noopener">네이버 스마트스토어에서 구매하기 ↗</a>
+        <a class="btn ghost" href="#" id="toTop">맨 위로</a>
+      </div>
+    </section>
+    <section class="related">
+      <div class="wrap">
+        <div class="sec-head"><h2 style="font-size:30px">More from LBBS</h2></div>
+        <div class="grid" id="related"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <svg class="logo-svg" viewBox="0 0 438 155" aria-label="LBBS"><use href="#lbbs-logo"/></svg>
+    <div class="row">
+      <span>LESS BUT BETTER STUDIO</span>
+      <span>상호 오두막집 · 대표 하태환</span>
+      <span>사업자등록번호 492-13-01514</span>
+      <span>통신판매업신고 제2024-별내-1144호</span>
+      <span>경기도 구리시 갈매순환로166번길 45, 8층 S838호</span>
+      <span>고객센터 070-8064-0450</span>
+      <span>문의 네이버 스마트스토어 톡톡</span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <a class="store-link" href="#" target="_blank" rel="noopener">Naver Smart Store ↗</a>
+      <a href="https://www.instagram.com/less_but_better_studio/" target="_blank" rel="noopener">Instagram @less_but_better_studio ↗</a>
+      <span>© LBBS. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ▼ 네이버 스마트스토어 링크 — 상품별 주소가 있으면 PRODUCT_URL에 넣어 주세요 */
+  const STORE_URL = "https://smartstore.naver.com/cabane/category/165bc97dd6f246c59ee536caadc1d874?cp=1";
+  const PRODUCT_URL = {
+    tissue: STORE_URL,
+    tray:   STORE_URL,
+    frame:  STORE_URL
+  };
+
+  const DETAIL = {"tissue": ["img/detail/tissue-1-1.jpg", "img/detail/tissue-1-2.jpg", "img/detail/tissue-1-3.jpg", "img/detail/tissue-2-1.jpg", "img/detail/tissue-2-2.jpg", "img/detail/tissue-2-3.jpg", "img/detail/tissue-3-1.jpg", "img/detail/tissue-3-2.jpg", "img/detail/tissue-3-3.jpg"], "tray": ["img/detail/tray-1-1.jpg", "img/detail/tray-1-2.jpg", "img/detail/tray-1-3.jpg", "img/detail/tray-1-4.jpg", "img/detail/tray-1-5.jpg", "img/detail/tray-2-1.jpg", "img/detail/tray-2-2.jpg", "img/detail/tray-2-3.jpg", "img/detail/tray-2-4.jpg", "img/detail/tray-3-1.jpg", "img/detail/tray-3-2.jpg", "img/detail/tray-4-1.jpg", "img/detail/tray-4-2.jpg", "img/detail/tray-5-1.jpg", "img/detail/tray-5-2.jpg", "img/detail/tray-6-1.jpg", "img/detail/tray-6-2.jpg", "img/detail/tray-7-1.jpg", "img/detail/tray-7-2.jpg", "img/detail/tray-8-1.jpg"], "frameA4": ["img/detail/frameA4-1-1.jpg", "img/detail/frameA4-1-2.jpg", "img/detail/frameA4-1-3.jpg", "img/detail/frameA4-1-4.jpg", "img/detail/frameA4-2-1.jpg", "img/detail/frameA4-2-2.jpg", "img/detail/frameA4-2-3.jpg", "img/detail/frameA4-3-1.jpg", "img/detail/frameA4-3-2.jpg"], "frame5R": ["img/detail/frame5R-1-1.jpg", "img/detail/frame5R-1-2.jpg", "img/detail/frame5R-1-3.jpg", "img/detail/frame5R-2-1.jpg", "img/detail/frame5R-2-2.jpg", "img/detail/frame5R-2-3.jpg", "img/detail/frame5R-2-4.jpg", "img/detail/frame5R-3-1.jpg", "img/detail/frame5R-3-2.jpg"], "frameCARD": ["img/detail/frameCARD-1-1.jpg", "img/detail/frameCARD-1-2.jpg", "img/detail/frameCARD-1-3.jpg", "img/detail/frameCARD-1-4.jpg", "img/detail/frameCARD-2-1.jpg", "img/detail/frameCARD-2-2.jpg", "img/detail/frameCARD-2-3.jpg", "img/detail/frameCARD-3-1.jpg", "img/detail/frameCARD-3-2.jpg"]};
+
+  const CARE = `
+    <p><b>일상 관리</b> — 부드러운 마른 천이나 극세사 천으로 자주 닦아주시면 표면의 광택이 오래 유지됩니다. 물기나 얼룩은 바로 닦아주세요.</p>
+    <p><b>세척</b> — 중성세제를 희석해 사용하고, 깨끗한 물로 헹군 뒤 마른 천으로 닦아주세요. 강산성·강알칼리성 세제, 염소계 표백제, 철 수세미는 피해주세요.</p>
+    <p><b>보관</b> — 고온·고습한 곳과 화기 근처는 피하고, 날카로운 물체가 닿지 않게 해주세요.</p>
+    <p><b>장기 관리</b> — 미세한 얼룩이나 지문은 스테인리스 전용 광택제로 깨끗하게 복원됩니다.</p>`;
+  const CAUTION = `
+    <p>소재 특성상 작은 마찰에도 스크래치나 얼룩이 생길 수 있으며, 이는 불량이 아닙니다.</p>
+    <p>지문, 얼룩, 흠집 등 사용감이 있을 경우 교환·환불이 어렵습니다.</p>`;
+
+  const PRODUCTS = {
+    tissue: {
+      cat: "TISSUE CASE", name: "Stainless Steel Tissue Case", ko: "LBBS 스테인리스 스틸 티슈케이스",
+      lead: ["판 하나를 접어 만든 가장 단순한 형태.", "윗판이 살짝 떠 있는 구조라 티슈를 옆에서 밀어 넣고, 가운데 원형 구멍으로 한 장씩 부드럽게 뽑아 씁니다."],
+      meta: [["Material","Stainless Steel 304 – HL"],["Size","270 × 100 × 60 mm (W×D×H)"],["Made in","Korea · Designed by LBBS"]],
+      images: ["img/tissue-front.jpg","img/hero.jpg","img/tissue-1.jpg","img/tissue-2.jpg","img/tissue-engrave.jpg"],
+      story: ["img/tissue-2.jpg","img/tissue-1.jpg","img/tissue-engrave.jpg"],
+      storyTitle: "매일 쓰는 물건일수록, 더 단정하게",
+      detail: "<p>일반 각티슈를 케이스에서 꺼내 리필 형태로 넣어 사용하는 커버형 티슈케이스예요.</p><p>윗판 안쪽에 LBBS 로고와 소재 정보가 각인되어 있습니다.</p>",
+      thumb: "img/tissue-front.jpg", badges: [["BEST","fill"]]
+    },
+    tray: {
+      cat: "TRAY", name: "Stainless Steel Tray", ko: "LBBS 스테인리스 스틸 트레이",
+      lead: ["모서리를 사선으로 접어 올린 얇은 트레이.", "열쇠와 반지처럼 작은 것부터 시계, 안경, 향수까지 — 다섯 가지 사이즈로 흩어진 물건에 자리를 만들어 줍니다."],
+      meta: [["Material","Stainless Steel 304 – HL"],["Height","5 mm"],["Made in","Korea · Designed by LBBS"]],
+      options: { label: "Size", items: [
+        {k:"XS", d:"90 × 90 mm", img:"img/tray-xs.jpg"},
+        {k:"S",  d:"170 × 90 mm", img:"img/tray-s.jpg"},
+        {k:"M",  d:"250 × 90 mm", img:"img/tray-m.jpg"},
+        {k:"L",  d:"170 × 170 mm", img:"img/tray-five.jpg"},
+        {k:"XL", d:"250 × 170 mm", img:"img/tray-five.jpg"}
+      ]},
+      images: ["img/tray-desk.jpg","img/tray-five.jpg","img/tray-life.jpg","img/tray-set.jpg","img/tray-detail.jpg"],
+      story: ["img/tray-desk.jpg","img/tray-five.jpg","img/tray-life.jpg","img/tray-detail.jpg"],
+      storyTitle: "흩어진 물건에 자리를 만들어 주는 판 한 장",
+      detail: "<p>XS · S · M · L · XL 다섯 가지 사이즈 (모두 높이 5mm).</p><p>여러 사이즈를 겹치거나 나란히 두어 세트로 쓰기 좋아요.</p>",
+      thumb: "img/tray-set.jpg", badges: [["5 SIZES",""]]
+    },
+    frame: {
+      cat: "STAND FRAME", name: "Stainless Steel Stand Frame", ko: "LBBS 스테인리스 스틸 스탠드 프레임",
+      lead: ["사진도, 메뉴판도, 메모도 — 자석으로 붙이는 스탠드.", "스테인리스 판을 한 번 접어 세운 프레임에 네오디뮴 자석으로 사진과 종이를 고정합니다. 키링이나 작은 소품을 붙여 두는 보드로도 쓸 수 있어요."],
+      meta: [["Material","Stainless Steel 430 – HL"],["Included","네오디뮴 자석 4EA"],["Made in","Korea · Designed by LBBS"]],
+      options: { label: "Size", items: [
+        {k:"A4",   d:"220 × 110 × 310 mm", img:"img/frameA4-1.jpg"},
+        {k:"5R",   d:"137 × 75 × 205 mm", img:"img/frame5r-1.jpg"},
+        {k:"CARD", d:"100 × 30 × 80 mm", img:"img/frameCard-1.jpg", out:true}
+      ]},
+      images: ["img/frame5r-1.jpg","img/frameA4-1.jpg","img/frameA4-2.jpg","img/frame5r-3.jpg","img/frameCard-2.jpg"],
+      story: ["img/frame5r-1.jpg","img/frameA4-3.jpg","img/frameA4-2.jpg","img/frame5r-3.jpg"],
+      storyTitle: "좋아하는 것을 세워 두는 가장 간단한 방법",
+      detail: "<p>A4 — 220 × 110 × 310 mm · 메뉴판, 포스터, 사진 여러 장</p><p>5R — 137 × 75 × 205 mm · 5×7인치 사진, 엽서</p><p>CARD — 100 × 30 × 80 mm · 명함, 네임카드 (현재 품절)</p><p>자석이 붙는 430 스테인리스라 원하는 위치에 자유롭게 고정할 수 있어요.</p>",
+      thumb: "img/frame5r-2.jpg", badges: [["NEW","fill"]]
+    }
+  };
+
+  /* home grid cards (frames shown per size) */
+  const CARDS = [
+    {to:"tissue", img:"img/tissue-front.jpg", cat:"TISSUE CASE", name:"Stainless Steel Tissue Case", ko:"스테인리스 티슈케이스", badges:[["BEST","fill"]]},
+    {to:"tray", img:"img/tray-set.jpg", cat:"TRAY", name:"Stainless Steel Tray", ko:"스테인리스 트레이 · XS–XL", badges:[["5 SIZES",""]]},
+    {to:"frame", opt:"A4", img:"img/frameA4-1.jpg", cat:"STAND FRAME", name:"Stand Frame — A4", ko:"스테인리스 스탠드 프레임 A4", badges:[["NEW","fill"]]},
+    {to:"frame", opt:"5R", img:"img/frame5r-2.jpg", cat:"STAND FRAME", name:"Stand Frame — 5R", ko:"스테인리스 스탠드 프레임 5R", badges:[["NEW","fill"]]},
+    {to:"frame", opt:"CARD", img:"img/frameCard-1.jpg", cat:"STAND FRAME", name:"Stand Frame — Card", ko:"스테인리스 스탠드 프레임 카드", badges:[["SOLD OUT","mute"]], out:true},
+    {soon:true}
+  ];
+
+  function badgeHTML(b){ return b.map(([t,c]) => `<span class="badge ${c}">${t}</span>`).join(""); }
+  function cardHTML(c){
+    if (c.soon) return `<div class="card soon" aria-label="준비 중인 제품"><div class="ph"><b>Coming Soon</b>새로운 제품을 설계하고 있어요.</div><div class="meta-top"><span>NEXT</span></div><h3>Next Product</h3><div class="ko">준비 중</div></div>`;
+    return `<a class="card${c.out?' soldout':''}" href="#${c.to}" data-opt="${c.opt||''}">
+      <div class="ph"><img src="${c.img}" alt="${c.ko}" loading="lazy"></div>
+      <div class="meta-top"><span>${c.cat}</span></div>
+      <h3>${c.name}</h3><div class="ko">${c.ko}</div>
+      <div class="badges">${badgeHTML(c.badges)}</div></a>`;
+  }
+  const grid = document.getElementById('grid');
+  grid.innerHTML = CARDS.map(cardHTML).join("");
+
+  let pendingOpt = null;
+  document.addEventListener('click', e => {
+    const c = e.target.closest('.card[data-opt]');
+    if (c && c.dataset.opt) pendingOpt = c.dataset.opt;
+  });
+
+  document.querySelectorAll('.store-link').forEach(a => a.href = STORE_URL);
+
+  const $ = id => document.getElementById(id);
+  let current = null, opt = null;
+
+  function setMain(src){ $('mainImg').src = src; $('thumbs').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.src === src)); }
+
+  function renderPD(key){
+    const p = PRODUCTS[key]; current = key;
+    $('pdCrumb').textContent = p.cat.charAt(0) + p.cat.slice(1).toLowerCase();
+    $('pdCat').textContent = p.cat;
+    $('pdName').textContent = p.name;
+    $('pdKo').textContent = p.ko;
+    $('pdLead').innerHTML = `<p class="lead">${p.lead[0]}</p><p class="lead" style="color:var(--sub)">${p.lead[1]}</p>`;
+    $('pdMeta').innerHTML = p.meta.map(([k,v]) => `<div><b>${k}</b><span>${v}</span></div>`).join("");
+    $('mainImg').alt = p.ko;
+
+    const imgs = p.images.slice();
+    $('thumbs').innerHTML = "";
+    imgs.forEach(src => {
+      const b = document.createElement('button'); b.dataset.src = src; b.setAttribute('aria-label','이미지 보기');
+      b.innerHTML = `<img src="${src}" alt="">`; b.addEventListener('click', () => setMain(src)); $('thumbs').appendChild(b);
+    });
+
+    if (p.options){
+      const items = p.options.items;
+      const chosen = !!(pendingOpt && items.find(i => i.k === pendingOpt));
+      opt = chosen ? pendingOpt : items.find(i => !i.out).k;
+      pendingOpt = null;
+      $('pdOptions').innerHTML = `<div class="opt-label">${p.options.label} — <span id="optName"></span></div><div class="swatches">${
+        items.map(i => `<button class="sw${i.out?' out':''}" data-k="${i.k}"><span>${i.k}</span><small>${i.d}</small></button>`).join("")}</div>`;
+      $('pdOptions').querySelectorAll('.sw').forEach(b => b.addEventListener('click', () => { opt = b.dataset.k; applyOpt(); }));
+      applyOpt();
+      if (!chosen) setMain(imgs[0]);
+    } else {
+      $('pdOptions').innerHTML = ""; opt = null; setMain(imgs[0]); setBuy(false);
+    }
+
+    $('pdDetails').innerHTML = `
+      <details open><summary>DETAIL</summary><div class="body">${p.detail}</div></details>
+      <details><summary>CARE</summary><div class="body">${CARE}</div></details>
+      <details><summary>NOTICE</summary><div class="body">${CAUTION}</div></details>
+      <details><summary>SHIPPING &amp; RETURN</summary><div class="body"><p>배송, 교환, 반품은 네이버 스마트스토어의 안내를 따릅니다.</p></div></details>`;
+
+    renderDetail();
+    $('related').innerHTML = CARDS.filter(c => c.soon || c.to !== key).slice(0,3).map(cardHTML).join("");
+  }
+
+  function applyOpt(){
+    const p = PRODUCTS[current], it = p.options.items.find(i => i.k === opt);
+    $('optName').textContent = `${it.k} · ${it.d}`;
+    $('pdOptions').querySelectorAll('.sw').forEach(b => b.classList.toggle('on', b.dataset.k === opt));
+    if (!p.images.includes(it.img)) {
+      // show the option image as the first thumb
+      const first = $('thumbs').querySelector('button[data-opt]');
+      if (first) first.remove();
+      const b = document.createElement('button'); b.dataset.src = it.img; b.dataset.opt = "1"; b.setAttribute('aria-label','선택한 사이즈 이미지');
+      b.innerHTML = `<img src="${it.img}" alt="">`; b.addEventListener('click', () => setMain(it.img));
+      $('thumbs').prepend(b);
+    }
+    setMain(it.img);
+    setBuy(!!it.out);
+    if (current === 'frame') renderDetail();
+  }
+
+  function renderDetail(){
+    const p = PRODUCTS[current];
+    const tabs = $('pdTabs');
+    if (current === 'frame'){
+      tabs.innerHTML = p.options.items.map(i => `<button data-k="${i.k}" class="${i.k===opt?'on':''}">${i.k}</button>`).join('');
+      tabs.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { opt = b.dataset.k; applyOpt(); }));
+      $('pdStoryTitle').textContent = `상세 정보 — ${opt}`;
+    } else { tabs.innerHTML = ''; $('pdStoryTitle').textContent = '상세 정보'; }
+    const list = current === 'frame' ? DETAIL['frame' + opt] : DETAIL[current];
+    $('pdStory').innerHTML = list.map((s,i) => `<img src="${s}" alt="${p.ko} 상세페이지 ${i+1}" loading="lazy">`).join('');
+  }
+
+  function setBuy(out){
+    const url = PRODUCT_URL[current] || STORE_URL;
+    [$('pdBuy'), $('pdBuy2')].forEach(a => {
+      a.href = url;
+      if (out){ a.setAttribute('aria-disabled','true'); a.textContent = '일시 품절 — 재입고 준비 중'; }
+      else { a.removeAttribute('aria-disabled'); a.textContent = '네이버 스마트스토어에서 구매하기 ↗'; }
+    });
+  }
+
+  $('toTop').addEventListener('click', e => { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); });
+
+  const drawer = $('drawer'), menuBtn = $('menuBtn');
+  menuBtn.addEventListener('click', () => {
+    const o = drawer.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', o ? 'true' : 'false');
+  });
+
+  function route(){
+    const h = location.hash.replace('#','');
+    const isPd = !!PRODUCTS[h];
+    $('homeView').style.display = isPd ? 'none' : '';
+    $('pdView').classList.toggle('show', isPd);
+    if (isPd){ renderPD(h); window.scrollTo(0,0); document.title = PRODUCTS[h].name + " — LBBS"; }
+    else {
+      document.title = "LBBS — Less But Better Studio";
+      if (h && h !== 'home'){ const el = document.getElementById(h); if (el) el.scrollIntoView(); }
+      else window.scrollTo(0,0);
+    }
+    drawer.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false');
+  }
+  window.addEventListener('hashchange', route);
+  route();
+</script>
+</body>
+</html>
