@@ -303,7 +303,7 @@
             <div class="ph"><img src="img/tissue-2.jpg" alt="책상 위의 LBBS 티슈케이스" loading="lazy"></div>
             <div class="tx"><div class="for">FOR · 새 집으로 이사한 사람</div><h3>Tissue Case</h3><p>집들이마다 하나씩 쌓이는 휴지 대신, 매일 쓰는 티슈를 단정하게 담는 케이스.</p><span class="go">선물하기 →</span></div>
           </a>
-          <a class="gcard card" href="#tray" data-opt="">
+          <a class="gcard card" href="#tray-xs" data-opt="">
             <div class="ph"><img src="img/tray-life.jpg" alt="시계와 안경을 올려둔 LBBS 트레이" loading="lazy" style="object-position:55% 70%"></div>
             <div class="tx"><div class="for">FOR · 작은 것들을 아끼는 사람</div><h3>Tray XS – XL</h3><p>반지, 시계, 열쇠처럼 매일 벗어두는 것들에 자리를 만들어 주는 판 한 장.</p><span class="go">선물하기 →</span></div>
           </a>
@@ -455,6 +455,20 @@
     <p>소재 특성상 작은 마찰에도 스크래치나 얼룩이 생길 수 있으며, 이는 불량이 아닙니다.</p>
     <p>지문, 얼룩, 흠집 등 사용감이 있을 경우 교환·환불이 어렵습니다.</p>`;
 
+  const TRAY_COMMON = ["img/detail/tray-1-1.jpg","img/detail/tray-1-2.jpg","img/detail/tray-1-3.jpg","img/detail/tray-1-4.jpg","img/detail/tray-1-5.jpg","img/detail/tray-2-1.jpg","img/detail/tray-2-2.jpg","img/detail/tray-2-3.jpg","img/detail/tray-2-4.jpg"];
+  function TRAY(size, dim, line, imgs, sec){
+    const key = "tray-" + size.toLowerCase();
+    DETAIL[key] = TRAY_COMMON.concat(DETAIL.tray.filter(p => p.includes("/tray-" + sec + "-")), ["img/detail/tray-8-1.jpg"]);
+    return {
+      cat: "TRAY", name: "Stainless Steel Tray — " + size, ko: "LBBS 스테인리스 스틸 트레이 " + size,
+      lead: ["모서리를 사선으로 접어 올린 얇은 트레이.", line],
+      meta: [["Material","Stainless Steel 304 – HL"],["Size", dim + " · 높이 5 mm"],["Made in","Korea · Designed by LBBS"]],
+      images: imgs.concat(["img/tray-five.jpg","img/tray-life.jpg"]),
+      detail: `<p>${size} — ${dim} (높이 5mm)</p><p>LBBS 트레이는 XS · S · M · L · XL 다섯 가지 사이즈가 있어요. 여러 사이즈를 겹치거나 나란히 두어 세트로 쓰기 좋아요.</p>`,
+      thumb: imgs[0], badges: []
+    };
+  }
+
   const PRODUCTS = {
     tissue: {
       cat: "TISSUE CASE", name: "Stainless Steel Tissue Case", ko: "LBBS 스테인리스 스틸 티슈케이스",
@@ -466,36 +480,24 @@
       detail: "<p>일반 각티슈를 케이스에서 꺼내 리필 형태로 넣어 사용하는 커버형 티슈케이스예요.</p><p>윗판 안쪽에 LBBS 로고와 소재 정보가 각인되어 있습니다.</p>",
       thumb: "img/tissue-front.jpg", badges: [["BEST","fill"]]
     },
-    tray: {
-      cat: "TRAY", name: "Stainless Steel Tray", ko: "LBBS 스테인리스 스틸 트레이",
-      lead: ["모서리를 사선으로 접어 올린 얇은 트레이.", "열쇠와 반지처럼 작은 것부터 시계, 안경, 향수까지 — 다섯 가지 사이즈로 흩어진 물건에 자리를 만들어 줍니다."],
-      meta: [["Material","Stainless Steel 304 – HL"],["Height","5 mm"],["Made in","Korea · Designed by LBBS"]],
-      options: { label: "Size", items: [
-        {k:"XS", d:"90 × 90 mm", img:"img/tray-xs.jpg"},
-        {k:"S",  d:"170 × 90 mm", img:"img/tray-s.jpg"},
-        {k:"M",  d:"250 × 90 mm", img:"img/tray-m.jpg"},
-        {k:"L",  d:"170 × 170 mm", img:"img/tray-five.jpg"},
-        {k:"XL", d:"250 × 170 mm", img:"img/tray-five.jpg"}
-      ]},
-      images: ["img/tray-desk.jpg","img/tray-five.jpg","img/tray-life.jpg","img/tray-set.jpg","img/tray-detail.jpg"],
-      story: ["img/tray-desk.jpg","img/tray-five.jpg","img/tray-life.jpg","img/tray-detail.jpg"],
-      storyTitle: "흩어진 물건에 자리를 만들어 주는 판 한 장",
-      detail: "<p>XS · S · M · L · XL 다섯 가지 사이즈 (모두 높이 5mm).</p><p>여러 사이즈를 겹치거나 나란히 두어 세트로 쓰기 좋아요.</p>",
-      thumb: "img/tray-set.jpg", badges: [["5 SIZES",""]]
-    },
+    "tray-xs": TRAY("XS","90 × 90 mm","반지, 귀걸이, 열쇠처럼 가장 작은 것들을 위한 사이즈.",["img/tray-xs.jpg","img/tray-xs-1.jpg","img/tray-xs-2.jpg","img/tray-xs-3.jpg"],3),
+    "tray-s":  TRAY("S","170 × 90 mm","열쇠와 지갑, 이어폰처럼 매일 들고 나가는 것들을 위한 사이즈.",["img/tray-s.jpg","img/tray-s-1.jpg","img/tray-s-2.jpg","img/tray-s-3.jpg"],4),
+    "tray-m":  TRAY("M","250 × 90 mm","펜과 안경, 시계처럼 길쭉한 물건을 나란히 올리는 사이즈.",["img/tray-m.jpg","img/tray-m-1.jpg","img/tray-m-2.jpg","img/tray-angle.jpg","img/tray-m-3.jpg"],5),
+    "tray-l":  TRAY("L","170 × 170 mm","컵과 향수, 작은 화병까지 올리는 정사각 사이즈.",["img/tray-l-1.jpg","img/tray-l-2.jpg","img/tray-l-3.jpg"],6),
+    "tray-xl": TRAY("XL","250 × 170 mm","책상 위 소품을 한데 모으거나, 간단한 찻상으로 쓰는 가장 큰 사이즈.",["img/tray-xl-1.jpg","img/tray-xl-2.jpg","img/tray-xl-3.jpg"],7),
     frame: {
       cat: "STAND FRAME", name: "Stainless Steel Stand Frame", ko: "LBBS 스테인리스 스틸 스탠드 프레임",
       lead: ["사진도, 메뉴판도, 메모도 — 자석으로 붙이는 스탠드.", "스테인리스 판을 한 번 접어 세운 프레임에 네오디뮴 자석으로 사진과 종이를 고정합니다. 키링이나 작은 소품을 붙여 두는 보드로도 쓸 수 있어요."],
       meta: [["Material","Stainless Steel 430 – HL"],["Included","네오디뮴 자석 4EA"],["Made in","Korea · Designed by LBBS"]],
       options: { label: "Size", items: [
-        {k:"A4",   d:"220 × 110 × 310 mm", img:"img/frameA4-1.jpg"},
-        {k:"5R",   d:"137 × 75 × 205 mm", img:"img/frame5r-1.jpg"},
-        {k:"CARD", d:"100 × 30 × 80 mm", img:"img/frameCard-1.jpg", out:true}
+        {k:"A4",   d:"220 × 110 × 310 mm", img:"img/frameA4-1.jpg", imgs:["img/frameA4-1.jpg","img/frameA4-2.jpg","img/frameA4-3.jpg"], use:"메뉴판, 포스터, 도면, 사진 여러 장"},
+        {k:"5R",   d:"137 × 75 × 205 mm", img:"img/frame5r-1.jpg", imgs:["img/frame5r-1.jpg","img/frame5r-2.jpg","img/frame5r-3.jpg"], use:"5×7인치 사진, 엽서"},
+        {k:"CARD", d:"100 × 30 × 80 mm", img:"img/frameCard-1.jpg", imgs:["img/frameCard-1.jpg","img/frameCard-2.jpg"], use:"명함, 네임카드"}
       ]},
       images: ["img/frame5r-1.jpg","img/frameA4-1.jpg","img/frameA4-2.jpg","img/frame5r-3.jpg","img/frameCard-2.jpg"],
       story: ["img/frame5r-1.jpg","img/frameA4-3.jpg","img/frameA4-2.jpg","img/frame5r-3.jpg"],
       storyTitle: "좋아하는 것을 세워 두는 가장 간단한 방법",
-      detail: "<p>A4 — 220 × 110 × 310 mm · 메뉴판, 포스터, 사진 여러 장</p><p>5R — 137 × 75 × 205 mm · 5×7인치 사진, 엽서</p><p>CARD — 100 × 30 × 80 mm · 명함, 네임카드 (현재 품절)</p><p>자석이 붙는 430 스테인리스라 원하는 위치에 자유롭게 고정할 수 있어요.</p>",
+      detail: "<p>자석이 붙는 430 스테인리스라 원하는 위치에 자유롭게 고정할 수 있어요.</p>",
       thumb: "img/frame5r-2.jpg", badges: [["NEW","fill"]]
     }
   };
@@ -503,11 +505,14 @@
   /* home grid cards (frames shown per size) */
   const CARDS = [
     {to:"tissue", img:"img/tissue-front.jpg", cat:"TISSUE CASE", name:"Stainless Steel Tissue Case", ko:"스테인리스 티슈케이스", badges:[["BEST","fill"]], gift:true},
-    {to:"tray", img:"img/tray-set.jpg", cat:"TRAY", name:"Stainless Steel Tray", ko:"스테인리스 트레이 · XS–XL", badges:[["5 SIZES",""]], gift:true},
+    {to:"tray-xs", img:"img/tray-xs.jpg", cat:"TRAY", name:"Stainless Steel Tray — XS", ko:"스테인리스 트레이 XS · 90 × 90", badges:[], gift:true},
+    {to:"tray-s", img:"img/tray-s.jpg", cat:"TRAY", name:"Stainless Steel Tray — S", ko:"스테인리스 트레이 S · 170 × 90", badges:[]},
+    {to:"tray-m", img:"img/tray-m-1.jpg", cat:"TRAY", name:"Stainless Steel Tray — M", ko:"스테인리스 트레이 M · 250 × 90", badges:[]},
+    {to:"tray-l", img:"img/tray-l-2.jpg", cat:"TRAY", name:"Stainless Steel Tray — L", ko:"스테인리스 트레이 L · 170 × 170", badges:[]},
+    {to:"tray-xl", img:"img/tray-xl-2.jpg", cat:"TRAY", name:"Stainless Steel Tray — XL", ko:"스테인리스 트레이 XL · 250 × 170", badges:[]},
     {to:"frame", opt:"A4", img:"img/frameA4-1.jpg", cat:"STAND FRAME", name:"Stand Frame — A4", ko:"스테인리스 스탠드 프레임 A4", badges:[["NEW","fill"]], gift:true},
     {to:"frame", opt:"5R", img:"img/frame5r-2.jpg", cat:"STAND FRAME", name:"Stand Frame — 5R", ko:"스테인리스 스탠드 프레임 5R", badges:[["NEW","fill"]]},
-    {to:"frame", opt:"CARD", img:"img/frameCard-1.jpg", cat:"STAND FRAME", name:"Stand Frame — Card", ko:"스테인리스 스탠드 프레임 카드", badges:[["SOLD OUT","mute"]], out:true},
-    {soon:true}
+    {to:"frame", opt:"CARD", img:"img/frameCard-1.jpg", cat:"STAND FRAME", name:"Stand Frame — Card", ko:"스테인리스 스탠드 프레임 카드", badges:[["NEW","fill"]]}
   ];
 
   function badgeHTML(b){ return b.map(([t,c]) => `<span class="badge ${c}">${t}</span>`).join(""); }
@@ -537,7 +542,7 @@
 
   function renderPD(key){
     const p = PRODUCTS[key]; current = key;
-    $('pdCrumb').textContent = p.cat.charAt(0) + p.cat.slice(1).toLowerCase();
+    $('pdCrumb').textContent = p.cat.charAt(0) + p.cat.slice(1).toLowerCase() + (key.startsWith('tray-') ? ' ' + key.slice(5).toUpperCase() : '');
     $('pdCat').textContent = p.cat;
     $('pdName').textContent = p.name;
     $('pdKo').textContent = p.ko;
@@ -572,7 +577,7 @@
       <details><summary>NOTICE</summary><div class="body">${CAUTION}</div></details>
       <details><summary>SHIPPING &amp; RETURN</summary><div class="body"><p>배송, 교환, 반품은 네이버 스마트스토어의 안내를 따릅니다.</p></div></details>`;
 
-    renderDetail();
+    if (p.options) applyOpt(); else renderDetail();
     $('related').innerHTML = CARDS.filter(c => c.soon || c.to !== key).slice(0,3).map(cardHTML).join("");
   }
 
@@ -580,7 +585,15 @@
     const p = PRODUCTS[current], it = p.options.items.find(i => i.k === opt);
     $('optName').textContent = `${it.k} · ${it.d}`;
     $('pdOptions').querySelectorAll('.sw').forEach(b => b.classList.toggle('on', b.dataset.k === opt));
-    if (!p.images.includes(it.img)) {
+    if (it.imgs) {
+      $('thumbs').innerHTML = "";
+      it.imgs.forEach(src => {
+        const b = document.createElement('button'); b.dataset.src = src; b.setAttribute('aria-label','이미지 보기');
+        b.innerHTML = `<img src="${src}" alt="">`; b.addEventListener('click', () => setMain(src)); $('thumbs').appendChild(b);
+      });
+      const d = document.querySelector('#pdDetails .body');
+      if (d) d.innerHTML = `<p>${it.k} — ${it.d} · ${it.use}</p>` + p.detail;
+    } else if (!p.images.includes(it.img)) {
       // show the option image as the first thumb
       const first = $('thumbs').querySelector('button[data-opt]');
       if (first) first.remove();
@@ -624,7 +637,8 @@
   });
 
   function route(){
-    const h = location.hash.replace('#','');
+    let h = location.hash.replace('#','');
+    if (h === 'tray') h = 'tray-xs';
     const isPd = !!PRODUCTS[h];
     $('homeView').style.display = isPd ? 'none' : '';
     $('pdView').classList.toggle('show', isPd);
