@@ -44,7 +44,9 @@
   .menu-sub a{display:block;font-size:15px;padding:5px 0;color:#bdbdb8}
   .menu-sub a:hover{color:#fff}
   .menu-sub small{display:block;color:#6d6d69;font-size:12px;margin-bottom:10px;letter-spacing:.08em}
-  .menu-top{position:absolute;top:0;left:0;right:0;height:72px}
+  header.menu-open{z-index:70;background:transparent;border-bottom-color:transparent}
+  header.menu-open .right a{opacity:0;pointer-events:none}
+  .menu-top{display:none}
   .menu-top .wrap{height:72px;display:flex;align-items:center}
 
   /* ---------- hero slider ---------- */
@@ -645,6 +647,10 @@
     hdr.classList.toggle('menu-open', o);
   });
 
+  function closeMenu(){ drawer.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); document.body.classList.remove('lock'); hdr.classList.remove('menu-open'); }
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
   /* header: transparent over hero, solid elsewhere */
   const hdr = $('hdr');
   function setSolid(){
@@ -687,7 +693,7 @@
       if (h && h !== 'home'){ const el = document.getElementById(h); if (el) el.scrollIntoView(); }
       else window.scrollTo(0,0);
     }
-    drawer.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); document.body.classList.remove('lock'); setSolid();
+    closeMenu(); setSolid();
   }
   window.addEventListener('hashchange', route);
   route(); observeRV(); setSolid(); window.addEventListener('load', setSolid);
